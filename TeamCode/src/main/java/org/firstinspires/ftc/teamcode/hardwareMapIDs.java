@@ -18,5 +18,8 @@ public class hardwareMapIDs {
 
     public String imu =  "imu";
 
+    public hardwareMapIDs(){
+
+    }
 
 }

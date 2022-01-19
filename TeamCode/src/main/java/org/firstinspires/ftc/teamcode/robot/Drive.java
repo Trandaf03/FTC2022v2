@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.hardwareMapIDs;
 import org.firstinspires.ftc.teamcode.util.breakingModeUtil;
 import org.firstinspires.ftc.teamcode.util.directionUtil;
 import org.firstinspires.ftc.teamcode.util.encoderUtil;
@@ -12,12 +13,13 @@ import java.util.List;
 public class Drive {
 
     private HardwareMap hardwareMap;
+    private hardwareMapIDs id = new hardwareMapIDs();
 
     private DcMotorEx leftFront = null;
     private DcMotorEx leftRear = null;
     private DcMotorEx rightFront = null;
     private DcMotorEx rightRear = null;
-    private double maximumVelocity = 386.3 * 10;
+
 
     List<DcMotorEx> dcMotorExList;
 
@@ -27,6 +29,12 @@ public class Drive {
                  directionUtil.direction direction,
                  encoderUtil.encoderMode encoderMode) {
         this.hardwareMap = hardwareMap;
+
+        leftFront = this.hardwareMap.get(DcMotorEx.class, id.leftFront);
+        rightFront = this.hardwareMap.get(DcMotorEx.class, id.rightFront);
+        leftRear = this.hardwareMap.get(DcMotorEx.class, id.leftRear);
+        rightRear = this.hardwareMap.get(DcMotorEx.class, id.rightRear);
+
 
         breakingModeUtil breaking = new breakingModeUtil(leftFront, leftRear, rightFront, rightRear);
         directionUtil dir = new directionUtil(leftFront, leftRear, rightFront, rightRear);
@@ -62,6 +70,11 @@ public class Drive {
     }
 
     public List<DcMotorEx> getDcMotorExList() {
+        dcMotorExList.add(leftFront);
+        dcMotorExList.add(rightFront);
+        dcMotorExList.add(leftRear);
+        dcMotorExList.add(rightRear);
+
         return dcMotorExList;
     }
 

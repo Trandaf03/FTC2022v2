@@ -35,11 +35,14 @@ public class Slider {
 
 
     public void sliderGoToPosition(sliderPos position) {
+        sliderMotor.setMotorEnable();
         sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sliderMotor.setTargetPosition(returnPositionTicks(position));
         sliderMotor.setPower(sliderSpeed);
-        while (sliderMotor.isBusy()) ;
+        while (sliderMotor.isBusy());
+        sliderMotor.setPower(0);
+        sliderMotor.setMotorDisable();
         lastSliderPos = position;
     }
 
@@ -50,13 +53,13 @@ public class Slider {
     public void setServoPosition(servoPos position) {
         switch (position) {
             case SERVO_DOWN_POS:
-                rotationServo.setPosition(0.12);
+                rotationServo.setPosition(0.05);
                 break;
             case SERVO_MID_POS:
-                rotationServo.setPosition(0.20);
+                rotationServo.setPosition(0.15);
                 break;
             case SERVO_UP_POS:
-                rotationServo.setPosition(0.32);
+                rotationServo.setPosition(0.23);
                 break;
             default:
                 break;
@@ -66,11 +69,11 @@ public class Slider {
     private int returnPositionTicks(sliderPos position) {
         switch (position) {
             case LOW_POS:
-                return 10;
+                return 1300;
             case MID_POS:
-                return 20;
+                return 2300;
             case HIGH_POS:
-                return 30;
+                return 2900;
             case ZERO_POS:
                 return -returnPositionTicks(lastSliderPos);
             default:

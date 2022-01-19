@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardwareMapIDs;
 
+
 public class Ducky {
 
     private DcMotorEx ducky = null;
