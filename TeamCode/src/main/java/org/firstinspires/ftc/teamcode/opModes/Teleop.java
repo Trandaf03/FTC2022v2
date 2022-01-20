@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.robot.Collector;
 import org.firstinspires.ftc.teamcode.robot.Drive;
 import org.firstinspires.ftc.teamcode.robot.Ducky;
+import org.firstinspires.ftc.teamcode.robot.Manuta;
 import org.firstinspires.ftc.teamcode.robot.Slider;
 import org.firstinspires.ftc.teamcode.util.breakingModeUtil;
 import org.firstinspires.ftc.teamcode.util.directionUtil;
@@ -21,10 +22,13 @@ public class Teleop extends LinearOpMode {
         Ducky ducky = new Ducky(hardwareMap);
         Slider slider = new Slider(hardwareMap);
         Collector collector = new Collector(hardwareMap);
+        Manuta manuta = new Manuta();
 
+
+        manuta.initManuta(hardwareMap);
         boolean isDucky = false;
         boolean isCollector = false;
-
+        boolean sus = false;
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
 
@@ -74,6 +78,16 @@ public class Teleop extends LinearOpMode {
             if (this.gamepad1.b) {
                 slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
                 this.sleep(200);
+            }
+
+            if(this.gamepad1.y){
+                sus = !sus;
+                this.sleep(200);
+            }
+            if (sus ==  true) {
+                manuta.manutaSus();
+            } else {
+                manuta.manutaJos();
             }
 
 

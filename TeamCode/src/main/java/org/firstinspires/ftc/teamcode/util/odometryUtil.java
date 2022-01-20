@@ -79,6 +79,7 @@ public class odometryUtil {
 
 
     private ElapsedTime time = new ElapsedTime();
+
     public void driveX2(double distance, double power) {
 
         drive.enableMotors();
@@ -102,7 +103,7 @@ public class odometryUtil {
             }
         } while (Math.abs(forwardEncoder.getCurrentPosition()) <= distance);
 
-        resolveError(distance, 0.25, forwardEncoder);
+        //resolveError(distance, 0.25, forwardEncoder);
         drive.stop();
         drive.disableMotors();
     }
@@ -111,9 +112,9 @@ public class odometryUtil {
         if (Math.abs(encoder.getCurrentPosition()) < targetPosition) {
             do {
                 drive.straightPower(speed);
-            } while (Math.abs(encoder.getCurrentPosition()) < targetPosition);
+            } while (Math.abs(encoder.getCurrentPosition()) < targetPosition + 10);
             resolveError(targetPosition, speed, encoder);
-        } else if (Math.abs(encoder.getCurrentPosition()) > targetPosition) {
+        } else if (Math.abs(encoder.getCurrentPosition()) > targetPosition - 10) {
             do {
                 drive.straightPower(-speed);
             } while (Math.abs(encoder.getCurrentPosition()) > targetPosition);

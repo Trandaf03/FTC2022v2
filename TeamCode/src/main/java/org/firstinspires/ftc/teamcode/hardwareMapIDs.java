@@ -16,6 +16,7 @@ public class hardwareMapIDs {
     public String sliderMotor = "slider";        //EH0
     public String sliderServo = "rotationServo"; //CH0
 
+    public String teammarker = "manuta"; //CH1
     public String imu =  "imu";
 
     public hardwareMapIDs(){

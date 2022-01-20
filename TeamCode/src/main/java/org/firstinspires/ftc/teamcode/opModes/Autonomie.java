@@ -10,17 +10,17 @@ import org.firstinspires.ftc.teamcode.util.encoderUtil;
 import org.firstinspires.ftc.teamcode.util.odometryUtil;
 
 
-@Autonomous (name = "autonomie")
+@Autonomous (name = "hautonomie")
 public class Autonomie extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         Drive drive = new Drive(hardwareMap, breakingModeUtil.breakingMode.BRAKE, directionUtil.direction.FORWARD, encoderUtil.encoderMode.RUN_USING);
-        odometryUtil odo = new odometryUtil(hardwareMap,drive,telemetry);
+        odometryUtil odometry = new odometryUtil(hardwareMap,drive,telemetry);
 
         waitForStart();
-        while (opModeIsActive()){
+        if (opModeIsActive() ){
             telemetry.addLine("teapa nu am autonomie");
             telemetry.update();
         }
