@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.Collector;
 import org.firstinspires.ftc.teamcode.robot.Drive;
 import org.firstinspires.ftc.teamcode.robot.Ducky;
-import org.firstinspires.ftc.teamcode.robot.Manuta;
+import org.firstinspires.ftc.teamcode.robot.Capping;
 import org.firstinspires.ftc.teamcode.robot.Slider;
 import org.firstinspires.ftc.teamcode.util.breakingModeUtil;
 import org.firstinspires.ftc.teamcode.util.directionUtil;
@@ -22,14 +23,16 @@ public class Teleop extends LinearOpMode {
         Ducky ducky = new Ducky(hardwareMap);
         Slider slider = new Slider(hardwareMap);
         Collector collector = new Collector(hardwareMap);
-        Manuta manuta = new Manuta();
+        Capping capping = new Capping(hardwareMap);
 
+        ElapsedTime cappingTime = new ElapsedTime();
 
-        manuta.initManuta(hardwareMap);
+        
         boolean isDucky = false;
         boolean isCollector = false;
         boolean sus = false;
         waitForStart();
+        cappingTime.reset();
         while (opModeIsActive() && !isStopRequested()) {
 
             drive.robotControl(this.gamepad1.left_stick_x, this.gamepad1.left_stick_y, this.gamepad1.right_stick_x);
@@ -50,6 +53,8 @@ public class Teleop extends LinearOpMode {
                 ducky.startDucky(1, Ducky.DUCKY_DIRECTION.FORWARD);
             }
 
+
+
             if (this.gamepad1.dpad_down) {
                 slider.sliderGoToPosition(Slider.sliderPos.ZERO_POS);
                 this.sleep(200);
@@ -67,6 +72,8 @@ public class Teleop extends LinearOpMode {
                 this.sleep(500);
             }
 
+
+
             if (this.gamepad1.a) {
                 slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
                 this.sleep(200);
@@ -80,14 +87,16 @@ public class Teleop extends LinearOpMode {
                 this.sleep(200);
             }
 
-            if(this.gamepad1.y){
+
+            //capping
+            if(this.gamepad1.y && cappingTime.seconds() > 90){
                 sus = !sus;
                 this.sleep(200);
             }
             if (sus ==  true) {
-                manuta.manutaSus();
+                capping.capping(Capping.capping_pos.up);
             } else {
-                manuta.manutaJos();
+                capping.capping(Capping.capping_pos.down);
             }
 
 
