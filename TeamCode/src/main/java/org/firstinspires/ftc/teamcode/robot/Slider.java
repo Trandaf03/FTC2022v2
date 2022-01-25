@@ -36,13 +36,14 @@ public class Slider {
 
     public void sliderGoToPosition(sliderPos position) {
         sliderMotor.setMotorEnable();
+
         sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         sliderMotor.setTargetPosition(returnPositionTicks(position));
         sliderMotor.setPower(sliderSpeed);
-        while (sliderMotor.isBusy());
-        sliderMotor.setPower(0);
-        sliderMotor.setMotorDisable();
+
+
         lastSliderPos = position;
     }
 
@@ -80,6 +81,15 @@ public class Slider {
                 break;
         }
         return 0;
+    }
+    public int lastPostion = 0;
+    public double errorTics = 10;
+
+    public void verificare(){
+        double currentPosition = sliderMotor.getCurrentPosition();
+        if(currentPosition == lastPostion - errorTics || currentPosition == lastPostion + errorTics){
+            sliderMotor.setPower(0);
+        }
     }
 
 

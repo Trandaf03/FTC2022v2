@@ -45,6 +45,8 @@ public class Teleop extends LinearOpMode {
             if (isCollector) {
                 collector.startCollector(1, Collector.COLLECTING_DIRECTION.FORWARD);
             }
+
+
             if (this.gamepad1.right_bumper) {
                 isDucky = !isDucky;
                 this.sleep(200);
@@ -89,7 +91,7 @@ public class Teleop extends LinearOpMode {
 
 
             //capping
-            if(this.gamepad1.y && cappingTime.seconds() > 90){
+            if(this.gamepad1.y && cappingTime.seconds() > 85){
                 sus = !sus;
                 this.sleep(200);
             }
@@ -99,6 +101,7 @@ public class Teleop extends LinearOpMode {
                 capping.capping(Capping.capping_pos.down);
             }
 
+            slider.verificare();
 
         }
 
