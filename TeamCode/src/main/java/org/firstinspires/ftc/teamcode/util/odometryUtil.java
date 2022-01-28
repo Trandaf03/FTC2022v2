@@ -131,20 +131,18 @@ public class odometryUtil {
         resetLeft();
 
         drive.strafePower(power);
-        while (leftEncoder.getCurrentPosition() < distance) {
-            telemetry.addData("acum sunt la cm", leftEncoder.getCurrentPosition() / COUNTS_PER_CM);
-            telemetry.update();
-        }
+        while (leftEncoder.getCurrentPosition() < distance) { }
 
         drive.stop();
         drive.disableMotors();
     }
 
     public void holonomicDrive(double xDistance, double yDistance, double speed, double t) throws InterruptedException {
-        xDistance *= 1.1;
-        yDistance *= 1.5;
+
         resetAll();
+
         double distance = Math.hypot(xDistance, yDistance) * COUNTS_PER_CM;
+
         double encoder_distance = Math.hypot(leftEncoder.getCurrentPosition(), forwardEncoder.getCurrentPosition());
 
 
@@ -154,13 +152,13 @@ public class odometryUtil {
         double x = xDistance;
         double rx = t;
 
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double r = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
         do {
-            double v1 = (y + x + rx) / denominator;
-            double v2 = (y - x + rx) / denominator;
-            double v3 = (y - x - rx) / denominator;
-            double v4 = (y + x - rx) / denominator;
+            double v1 = (y + x + rx) / r;
+            double v2 = (y - x + rx) / r;
+            double v3 = (y - x - rx) / r;
+            double v4 = (y + x - rx) / r;
             drive.setCustomPower(v1, v2, v3, v4);
         } while (drive.isEntireRobotBusy() && encoder_distance < distance);
 
