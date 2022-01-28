@@ -37,12 +37,9 @@ public class Slider {
     public void sliderGoToPosition(sliderPos position) {
         sliderMotor.setMotorEnable();
 
-        sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         sliderMotor.setTargetPosition(returnPositionTicks(position));
+        sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sliderMotor.setPower(sliderSpeed);
-
 
         lastSliderPos = position;
     }
@@ -76,7 +73,7 @@ public class Slider {
             case HIGH_POS:
                 return 2900;
             case ZERO_POS:
-                return -returnPositionTicks(lastSliderPos);
+                return 0;
             default:
                 break;
         }
