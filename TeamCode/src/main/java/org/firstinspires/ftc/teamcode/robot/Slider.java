@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.hardwareMapIDs;
 
 public class Slider {
-    private DcMotorEx sliderMotor = null;
-    private Servo rotationServo = null;
+    public DcMotorEx sliderMotor = null;
+    public Servo rotationServo = null;
     private hardwareMapIDs id = new hardwareMapIDs();
     private double sliderSpeed = 0.25;
 
     public enum servoPos {
-        SERVO_DOWN_POS, SERVO_UP_POS, SERVO_MID_POS;
+        SERVO_DOWN_POS, SERVO_UP_POS, SERVO_MID_POS,SERVO_COLECTAT_POS;
     }
 
     public enum sliderPos {
@@ -29,6 +29,8 @@ public class Slider {
         rotationServo = hardwareMap.get(Servo.class, id.sliderServo);
 
         sliderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         sliderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         sliderMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
@@ -50,14 +52,17 @@ public class Slider {
 
     public void setServoPosition(servoPos position) {
         switch (position) {
+            case SERVO_COLECTAT_POS:
+                rotationServo.setPosition(0.35);
+                break;
             case SERVO_DOWN_POS:
                 rotationServo.setPosition(0.05);
                 break;
             case SERVO_MID_POS:
-                rotationServo.setPosition(0.15);
+                rotationServo.setPosition(0.5);
                 break;
             case SERVO_UP_POS:
-                rotationServo.setPosition(0.23);
+                rotationServo.setPosition(0.32);
                 break;
             default:
                 break;
@@ -71,7 +76,7 @@ public class Slider {
             case MID_POS:
                 return 2300;
             case HIGH_POS:
-                return 2900;
+                return 3000;
             case ZERO_POS:
                 return 0;
             default:

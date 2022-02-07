@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.robot.Collector;
 import org.firstinspires.ftc.teamcode.robot.Drive;
 import org.firstinspires.ftc.teamcode.robot.Ducky;
-import org.firstinspires.ftc.teamcode.robot.Capping;
 import org.firstinspires.ftc.teamcode.robot.Slider;
 import org.firstinspires.ftc.teamcode.util.breakingModeUtil;
 import org.firstinspires.ftc.teamcode.util.directionUtil;
@@ -23,7 +22,6 @@ public class Teleop extends LinearOpMode {
         Ducky ducky = new Ducky(hardwareMap);
         Slider slider = new Slider(hardwareMap);
         Collector collector = new Collector(hardwareMap);
-        Capping capping = new Capping(hardwareMap);
 
         ElapsedTime cappingTime = new ElapsedTime();
 
@@ -31,60 +29,83 @@ public class Teleop extends LinearOpMode {
         boolean isDucky = false;
         boolean isCollector = false;
         boolean sus = false;
+        boolean sliderJos = false;
+        boolean colectat = false;
+
         waitForStart();
         cappingTime.reset();
+
         while (opModeIsActive() && !isStopRequested()) {
 
             drive.robotControl(this.gamepad1.left_stick_x, this.gamepad1.left_stick_y, this.gamepad1.right_stick_x);
 
 
-            if (this.gamepad1.left_bumper) {
-                isCollector = !isCollector;
-                this.sleep(200);
-            }
-            if (isCollector) {
-                collector.startCollector(1, Collector.COLLECTING_DIRECTION.FORWARD);
-            }
+
             if (this.gamepad1.right_bumper) {
-                isDucky = !isDucky;
-                this.sleep(200);
-            }
-            if (isDucky) {
-                ducky.startDucky(1, Ducky.DUCKY_DIRECTION.FORWARD);
-            }
-
-
-
-            if (this.gamepad1.dpad_down) {
-                slider.sliderGoToPosition(Slider.sliderPos.ZERO_POS);
-                this.sleep(200);
-            }
-            if (this.gamepad1.dpad_left) {
-                slider.sliderGoToPosition(Slider.sliderPos.LOW_POS);
-                this.sleep(500);
-            }
-            if (this.gamepad1.dpad_right) {
-                slider.sliderGoToPosition(Slider.sliderPos.MID_POS);
-                this.sleep(500);
-            }
-            if (this.gamepad1.dpad_up) {
-                slider.sliderGoToPosition(Slider.sliderPos.HIGH_POS);
-                this.sleep(500);
+               if(isCollector == false){
+                   collector.startCollector(1, Collector.COLLECTING_DIRECTION.FORWARD);
+                   isCollector = true;
+                   this.sleep(200);
+               }
+               else{
+                   collector.startCollector(0, Collector.COLLECTING_DIRECTION.FORWARD);
+                   isCollector = false;
+                   this.sleep(200);
+               }
             }
 
-
-
-            if (this.gamepad1.a) {
-                slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
-                this.sleep(200);
+            if (this.gamepad1.left_bumper) {
+                if(isDucky == false){
+                    ducky.startDucky(1, Ducky.DUCKY_DIRECTION.FORWARD);
+                    isDucky = true;
+                    this.sleep(200);
+                }
+                else{
+                    ducky.startDucky(0, Ducky.DUCKY_DIRECTION.FORWARD);
+                    isDucky = false;
+                    this.sleep(200);
+                }
             }
-            if (this.gamepad1.x) {
-                slider.setServoPosition(Slider.servoPos.SERVO_MID_POS);
-                this.sleep(200);
+
+            if(this.gamepad1.triangle){
+                if(sliderJos == false){
+                    slider.setServoPosition(Slider.servoPos.SERVO_MID_POS);
+
+                    sliderJos = true;
+                    this.sleep(200);
+                }
+                else{
+                    slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
+
+                    sliderJos = false;
+                    this.sleep(200);
+                }
             }
-            if (this.gamepad1.b) {
-                slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
-                this.sleep(200);
+
+            if(this.gamepad1.circle){
+                if(colectat == false){
+                    slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
+
+                    colectat = true;
+                    this.sleep(200);
+                }
+                else if(colectat==true){
+                    slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
+                    colectat = false;
+                    this.sleep(200);
+                }
+
+            }
+
+            if(this.gamepad1.right_trigger > 0){
+                slider.sliderMotor.setPower(0.5*this.gamepad1.right_trigger);
+            }
+            if(this.gamepad1.left_trigger > 0){
+                slider.sliderMotor.setPower(-1*0.5*this.gamepad1.left_trigger);
+            }
+            if(this.gamepad1.right_trigger == 0 && this.gamepad1.left_trigger == 0){
+                slider.sliderMotor.setPower(0);
+
             }
 
 
@@ -93,14 +114,11 @@ public class Teleop extends LinearOpMode {
                 sus = !sus;
                 this.sleep(200);
             }
-            if (sus ==  true) {
-                capping.capping(Capping.capping_pos.up);
-            } else {
-                capping.capping(Capping.capping_pos.down);
-            }
-
+            telemetry.addLine(String.valueOf(slider.sliderMotor.getCurrentPosition()));
+            telemetry.update();
 
         }
+
 
 
     }
