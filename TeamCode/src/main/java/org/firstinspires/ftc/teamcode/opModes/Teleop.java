@@ -106,21 +106,24 @@ public class Teleop extends LinearOpMode {
 
             }
 
-            if (this.gamepad1.dpad_up) {
+            if (this.gamepad1.dpad_up && culisantaSus == false) {
                 slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                slider.sliderGoToPosition_OG(Slider.sliderPos.HIGH_POS, 0.75);
+                slider.liftSlider(Slider.sliderPos.HIGH_POS, 0.75);
+                culisantaSus = true;
                 this.sleep(200);
             }
-            if (this.gamepad1.dpad_down) {
+            if (this.gamepad1.dpad_down && culisantaSus) {
                 slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                slider.sliderGoToPosition_OG(Slider.sliderPos.HIGH_POS, -0.55);
+                slider.liftSlider(Slider.sliderPos.HIGH_POS, -0.55);
+                culisantaSus = false;
                 this.sleep(200);
             }
+
 
             if(this.gamepad1.right_trigger > 0){
-                slider.sliderMotor.setPower(0.5*this.gamepad1.right_trigger);
+                slider.sliderMotor.setPower(0.75*this.gamepad1.right_trigger);
             }
             if(this.gamepad1.left_trigger > 0){
                 slider.sliderMotor.setPower(-1*0.5*this.gamepad1.left_trigger);

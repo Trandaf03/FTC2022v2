@@ -38,7 +38,7 @@ public class Slider {
 
     public double returnPos(){return Math.abs(sliderMotor.getCurrentPosition()); }
 
-    public void sliderGoToPosition_OG(sliderPos position, double speed){
+    public void liftSlider(sliderPos position, double speed){
 
         culisantaRunnig = true;
         sliderMotor.setPower(speed);
@@ -52,16 +52,12 @@ public class Slider {
 
     }
 
-    public void sliderGoToPosition( double speed){
-
-        culisantaRunnig = true;
+    public void startCulisanta( double speed){
         sliderMotor.setPower(speed);
-
     }
-     public void sliderStop(sliderPos position){
+     public void stopCulisanta(sliderPos position){
          if(returnPos() > returnPositionTicks(position)){
              sliderMotor.setPower(0);
-
          }
 
      }
