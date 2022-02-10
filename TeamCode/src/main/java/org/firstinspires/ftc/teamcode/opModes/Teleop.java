@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.Collector;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.robot.Slider;
 import org.firstinspires.ftc.teamcode.util.breakingModeUtil;
 import org.firstinspires.ftc.teamcode.util.directionUtil;
 import org.firstinspires.ftc.teamcode.util.encoderUtil;
+import org.firstinspires.ftc.teamcode.util.odometryUtil;
 
 @TeleOp(name = "MainTele")
 public class Teleop extends LinearOpMode {
@@ -22,6 +24,9 @@ public class Teleop extends LinearOpMode {
         Ducky ducky = new Ducky(hardwareMap);
         Slider slider = new Slider(hardwareMap);
         Collector collector = new Collector(hardwareMap);
+        odometryUtil odometry = new odometryUtil(hardwareMap,drive,telemetry);
+
+//        odometryUtil odometry = new odometryUtil();
 
         ElapsedTime cappingTime = new ElapsedTime();
 
@@ -31,6 +36,10 @@ public class Teleop extends LinearOpMode {
         boolean sus = false;
         boolean sliderJos = false;
         boolean colectat = false;
+        boolean culisantaSus = false;
+
+        slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
+
 
         waitForStart();
         cappingTime.reset();
@@ -56,7 +65,7 @@ public class Teleop extends LinearOpMode {
 
             if (this.gamepad1.left_bumper) {
                 if(isDucky == false){
-                    ducky.startDucky(1, Ducky.DUCKY_DIRECTION.FORWARD);
+                    ducky.startDucky(0.25, Ducky.DUCKY_DIRECTION.FORWARD);
                     isDucky = true;
                     this.sleep(200);
                 }
@@ -69,7 +78,7 @@ public class Teleop extends LinearOpMode {
 
             if(this.gamepad1.triangle){
                 if(sliderJos == false){
-                    slider.setServoPosition(Slider.servoPos.SERVO_MID_POS);
+                    slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
 
                     sliderJos = true;
                     this.sleep(200);
@@ -97,6 +106,19 @@ public class Teleop extends LinearOpMode {
 
             }
 
+            if (this.gamepad1.dpad_up) {
+                slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                slider.sliderGoToPosition_OG(Slider.sliderPos.HIGH_POS, 0.75);
+                this.sleep(200);
+            }
+            if (this.gamepad1.dpad_down) {
+                slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                slider.sliderGoToPosition_OG(Slider.sliderPos.HIGH_POS, -0.55);
+                this.sleep(200);
+            }
+
             if(this.gamepad1.right_trigger > 0){
                 slider.sliderMotor.setPower(0.5*this.gamepad1.right_trigger);
             }
@@ -114,7 +136,10 @@ public class Teleop extends LinearOpMode {
                 sus = !sus;
                 this.sleep(200);
             }
-            telemetry.addLine(String.valueOf(slider.sliderMotor.getCurrentPosition()));
+            telemetry.addLine("culisanta: "+ String.valueOf(slider.sliderMotor.getCurrentPosition()));
+            telemetry.addLine("X: "+ odometry.returnX());
+            telemetry.addLine("Y: "+ odometry.returnY());
+
             telemetry.update();
 
         }

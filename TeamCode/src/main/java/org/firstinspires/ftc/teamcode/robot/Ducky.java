@@ -30,4 +30,18 @@ public class Ducky {
 
     }
 
+    public void stopDucky(){
+        ducky.setPower(0);
+    }
+
+    public void progressivePow(double pow){
+        double cur = 0;
+
+        while(cur != pow){
+            startDucky(cur, Ducky.DUCKY_DIRECTION.FORWARD);
+            cur += 0.01;
+        }
+
+    }
+
 }

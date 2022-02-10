@@ -13,9 +13,10 @@ public class Slider {
     public Servo rotationServo = null;
     private hardwareMapIDs id = new hardwareMapIDs();
     private double sliderSpeed = 0.25;
+    private boolean culisantaRunnig = false;
 
     public enum servoPos {
-        SERVO_DOWN_POS, SERVO_UP_POS, SERVO_MID_POS,SERVO_COLECTAT_POS;
+        SERVO_DOWN_POS, SERVO_UP_POS,SERVO_COLECTAT_POS;
     }
 
     public enum sliderPos {
@@ -35,16 +36,35 @@ public class Slider {
         sliderMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
+    public double returnPos(){return Math.abs(sliderMotor.getCurrentPosition()); }
 
-    public void sliderGoToPosition(sliderPos position) {
-        sliderMotor.setMotorEnable();
+    public void sliderGoToPosition_OG(sliderPos position, double speed){
 
-        sliderMotor.setTargetPosition(returnPositionTicks(position));
-        sliderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sliderMotor.setPower(sliderSpeed);
+        culisantaRunnig = true;
+        sliderMotor.setPower(speed);
+        while(culisantaRunnig){
+            if(returnPos() > returnPositionTicks(position)){
+                sliderMotor.setPower(0);
+                culisantaRunnig = false;
+            }
+        }
+        sliderMotor.setPower(0);
 
-        lastSliderPos = position;
     }
+
+    public void sliderGoToPosition( double speed){
+
+        culisantaRunnig = true;
+        sliderMotor.setPower(speed);
+
+    }
+     public void sliderStop(sliderPos position){
+         if(returnPos() > returnPositionTicks(position)){
+             sliderMotor.setPower(0);
+
+         }
+
+     }
 
     public DcMotorEx returnSlider() {
         return sliderMotor;
@@ -53,16 +73,14 @@ public class Slider {
     public void setServoPosition(servoPos position) {
         switch (position) {
             case SERVO_COLECTAT_POS:
-                rotationServo.setPosition(0.35);
+                rotationServo.setPosition(0.3);
                 break;
             case SERVO_DOWN_POS:
-                rotationServo.setPosition(0.05);
+                rotationServo.setPosition(0.43);
                 break;
-            case SERVO_MID_POS:
-                rotationServo.setPosition(0.5);
-                break;
+
             case SERVO_UP_POS:
-                rotationServo.setPosition(0.32);
+                rotationServo.setPosition(0.25);
                 break;
             default:
                 break;
@@ -76,7 +94,7 @@ public class Slider {
             case MID_POS:
                 return 2300;
             case HIGH_POS:
-                return 3000;
+                return 2900;
             case ZERO_POS:
                 return 0;
             default:

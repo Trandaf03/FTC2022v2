@@ -15,10 +15,10 @@ public class Drive {
     private HardwareMap hardwareMap;
     private hardwareMapIDs id = new hardwareMapIDs();
 
-    private DcMotorEx leftFront = null;
-    private DcMotorEx leftRear = null;
-    private DcMotorEx rightFront = null;
-    private DcMotorEx rightRear = null;
+    public DcMotorEx leftFront = null;
+    public DcMotorEx leftRear = null;
+    public DcMotorEx rightFront = null;
+    public DcMotorEx rightRear = null;
 
 
     List<DcMotorEx> dcMotorExList;
@@ -45,7 +45,6 @@ public class Drive {
         mode.setEncoderMode(encoderMode);
 
         stop();
-        disableMotors();
     }
 
     public void stop() {
@@ -76,6 +75,21 @@ public class Drive {
         dcMotorExList.add(rightRear);
 
         return dcMotorExList;
+    }
+
+    public void robotControl2(double left_stick_x, double left_stick_y, double right_stick_x) {
+        double r = Math.hypot(left_stick_x, -left_stick_y);
+        double robotAngle = Math.atan2(left_stick_y, -left_stick_x) - Math.PI / 4;
+        double rightX = -right_stick_x;
+        final double v1 = (setVelocity(r * Math.cos(robotAngle)) + rightX)*386.3;
+        final double v2 = (setVelocity(r * Math.sin(robotAngle)) - rightX)*386.3;
+        final double v3 = (setVelocity(r * Math.sin(robotAngle)) + rightX)*386.3;
+        final double v4 = (setVelocity(r * Math.cos(robotAngle)) - rightX)*386.3;
+
+        leftFront.setVelocity(v1);
+        rightFront.setVelocity(v2);
+        leftRear.setVelocity(v3);
+        rightRear.setVelocity(v4);
     }
 
     public void robotControl(double left_stick_x, double left_stick_y, double right_stick_x) {

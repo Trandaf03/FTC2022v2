@@ -5,10 +5,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.hardwareMapIDs;
 import org.firstinspires.ftc.teamcode.robot.Drive;
+import org.firstinspires.ftc.teamcode.robot.Slider;
 
 public class odometryUtil {
     private DcMotorEx forwardEncoder = null;
@@ -19,6 +22,7 @@ public class odometryUtil {
     private Drive drive;
     private hardwareMapIDs IDs = new hardwareMapIDs();
 
+    Slider slider;
 
     private static final double COUNTS_PER_MOTOR_REV = 8949.99995556 / 6;
     private static final double DRIVE_GEAR_REDUCTION = 1;
@@ -26,8 +30,9 @@ public class odometryUtil {
     public static final double COUNTS_PER_CM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * Math.PI);
 
 
+
     public double returnY() {
-        return forwardEncoder.getCurrentPosition();
+        return Math.abs(forwardEncoder.getCurrentPosition());
     }
 
     public double returnX() {
@@ -39,6 +44,8 @@ public class odometryUtil {
         this.drive = drive;
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
+        Slider slider  = new Slider(hardwareMap);
+        this.slider = slider;
 
         forwardEncoder = this.hardwareMap.get(DcMotorEx.class, IDs.xOdometry);
         leftEncoder = this.hardwareMap.get(DcMotorEx.class, IDs.yOdometry);
@@ -58,7 +65,7 @@ public class odometryUtil {
 
 
     //fata spate
-    public void driveX(double distance, double power) {
+    public void driveY(double distance, double power, boolean stop) {
 
         drive.enableMotors();
         distance = Math.abs(distance * COUNTS_PER_CM);
@@ -67,8 +74,9 @@ public class odometryUtil {
 
         drive.straightPower(power);
 
-        while (Math.abs(forwardEncoder.getCurrentPosition()) < Math.abs(distance)) {
-
+        while (returnY() < Math.abs(distance)  ) {
+//            slider.sliderGoToPosition(0.75);
+//            slider.sliderStop(Slider.sliderPos.HIGH_POS);
             telemetry.addData("acum sunt la cm", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
             telemetry.update();
         }
@@ -108,6 +116,7 @@ public class odometryUtil {
         drive.disableMotors();
     }
 
+
     private void resolveError(double targetPosition, double speed, DcMotorEx encoder) {
         if (Math.abs(encoder.getCurrentPosition()) < targetPosition) {
             do {
@@ -124,14 +133,30 @@ public class odometryUtil {
 
 
     //stanga dreapta
-    public void driveY(double distance, double power) {
+    public void driveX(double distance, double power) {
         drive.enableMotors();
         distance = distance * COUNTS_PER_CM;
 
         resetLeft();
 
         drive.strafePower(power);
-        while (leftEncoder.getCurrentPosition() < distance) { }
+        while (Math.abs(leftEncoder.getCurrentPosition()) < Math.abs(distance)) {
+            telemetry.addLine(String.valueOf(drive.leftFront.getVelocity()));
+            telemetry.addLine(String.valueOf(drive.leftFront.getCurrentPosition()));
+
+            telemetry.addLine(String.valueOf(drive.leftRear.getVelocity()));
+            telemetry.addLine(String.valueOf(drive.leftRear.getCurrentPosition()));
+
+
+            telemetry.addLine(String.valueOf(drive.rightFront.getVelocity()));
+            telemetry.addLine(String.valueOf(drive.rightFront.getCurrentPosition()));
+
+            telemetry.addLine(String.valueOf(drive.rightRear.getVelocity()));
+            telemetry.addLine(String.valueOf(drive.rightRear.getCurrentPosition()));
+
+
+            telemetry.update();
+        }
 
         drive.stop();
         drive.disableMotors();
@@ -160,7 +185,10 @@ public class odometryUtil {
             double v3 = (y - x - rx) / r;
             double v4 = (y + x - rx) / r;
             drive.setCustomPower(v1, v2, v3, v4);
-        } while (drive.isEntireRobotBusy() && encoder_distance < distance);
+
+            telemetry.addData("acum sunt la cm", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
+            telemetry.update();
+        } while (drive.isEntireRobotBusy() && Math.abs(encoder_distance*COUNTS_PER_CM) < distance);
 
         drive.stop();
         drive.enableMotors();
