@@ -42,6 +42,7 @@ public class Slider {
 
         culisantaRunnig = true;
         sliderMotor.setPower(speed);
+
         while(culisantaRunnig){
             if(returnPos() > returnPositionTicks(position)){
                 sliderMotor.setPower(0);
@@ -52,10 +53,20 @@ public class Slider {
 
     }
 
+    public boolean verify(sliderPos position){
+        if(returnPos() > returnPositionTicks(position)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public void startCulisanta( double speed){
         sliderMotor.setPower(speed);
     }
      public void stopCulisanta(sliderPos position){
+
          if(returnPos() > returnPositionTicks(position)){
              sliderMotor.setPower(0);
          }
@@ -90,7 +101,7 @@ public class Slider {
             case MID_POS:
                 return 2300;
             case HIGH_POS:
-                return 2900;
+                return 2700;
             case ZERO_POS:
                 return 0;
             default:

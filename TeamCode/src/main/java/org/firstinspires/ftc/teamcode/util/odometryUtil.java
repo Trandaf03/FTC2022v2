@@ -23,6 +23,7 @@ public class odometryUtil {
     private hardwareMapIDs IDs = new hardwareMapIDs();
 
     Slider slider;
+    boolean running = false;
 
     private static final double COUNTS_PER_MOTOR_REV = 8949.99995556 / 6;
     private static final double DRIVE_GEAR_REDUCTION = 1;
@@ -63,23 +64,29 @@ public class odometryUtil {
 
 
     //fata spate
-    public void driveY_and_lift(double distance, double power, boolean stop) {
+    public void driveY_and_lift(double distance, double power, int directie) {
 
         drive.enableMotors();
+        running = true;
+
         distance = Math.abs(distance * COUNTS_PER_CM);
 
         resetForword();
 
         drive.straightPower(power);
 
-        while (returnY() < Math.abs(distance)  ) {
-            slider.startCulisanta(0.75);
+        while (running  ) {
+            slider.startCulisanta(0.75*directie);
             slider.stopCulisanta(Slider.sliderPos.HIGH_POS);
+            if(returnY() > Math.abs(distance) ){
+                drive.stop();
+            }
+
             telemetry.addData("acum sunt la cm ", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
             telemetry.update();
         }
+        boolean running = false;
 
-        drive.stop();
         drive.disableMotors();
     }
 
@@ -93,8 +100,7 @@ public class odometryUtil {
         drive.straightPower(power);
 
         while (returnY() < Math.abs(distance)  ) {
-            slider.startCulisanta(0.75);
-            slider.stopCulisanta(Slider.sliderPos.HIGH_POS);
+
             telemetry.addData("acum sunt la cm ", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
             telemetry.update();
         }
@@ -142,35 +148,9 @@ public class odometryUtil {
 
     private ElapsedTime time = new ElapsedTime();
 
-    public void driveX2(double distance, double power) {
 
-        drive.enableMotors();
-        distance = distance * COUNTS_PER_CM;
-        distance = Math.abs(distance);
-        resetForword();
-        double maximumSeconds = 1.0;
-        double ticsToMaximumSeconds = 0;
-        time.reset();
-        do {
-            if (time.seconds() <= maximumSeconds && Math.abs(forwardEncoder.getCurrentPosition()) <= distance / 2) {
-                drive.straightPower(time.seconds());
-                ticsToMaximumSeconds = Math.abs(forwardEncoder.getCurrentPosition());
-            } else {
-                if (Math.abs(forwardEncoder.getCurrentPosition()) <= distance - ticsToMaximumSeconds) {
-                    drive.straightPower(1);
-                    time.reset();
-                } else {
-                    drive.straightPower(1.0 - time.seconds());
-                }
-            }
-        } while (Math.abs(forwardEncoder.getCurrentPosition()) <= distance);
 
-        //resolveError(distance, 0.25, forwardEncoder);
-        drive.stop();
-        drive.disableMotors();
-    }
-
-    public void holonomicDrive_1(double xDistance, double yDistance, double speed, double t) throws InterruptedException {
+    public void diagonala(double xDistance, double yDistance, double speed, double t, int directie) throws InterruptedException {
 
         resetAll();
 
@@ -189,54 +169,24 @@ public class odometryUtil {
         double r = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
         do {
-            double v1 = (y + x + rx) / r;
-            double v2 = (y - x + rx) / r;
-            double v3 = (y - x - rx) / r;
-            double v4 = (y + x - rx) / r;
+            double v1 = ((y + x + rx) / r )* speed * directie;
+            double v2 = ((y - x + rx) / r)*speed*directie;
+            double v3 = ((y - x - rx) / r)*speed*directie;
+            double v4 = ((y + x - rx) / r)*speed*directie;
             drive.setCustomPower(v1, v2, v3, v4);
 
-            telemetry.addData("acum sunt la cm", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
+            telemetry.addData("y ", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
+            telemetry.addData("x ", leftEncoder.getCurrentPosition() / COUNTS_PER_CM);
+
             telemetry.update();
-        } while (drive.isEntireRobotBusy() && Math.abs(encoder_distance*COUNTS_PER_CM) < distance);
+        } while (returnY()/ COUNTS_PER_CM < yDistance && returnX()/ COUNTS_PER_CM < xDistance);
 
         drive.stop();
         drive.enableMotors();
 
     }
 
-    public void holonomicDrive_2(double xDistance, double yDistance, double speed, double t) throws InterruptedException {
 
-        resetAll();
-
-        double distance = Math.hypot(xDistance, yDistance) * COUNTS_PER_CM;
-
-        double encoder_distance = Math.hypot(leftEncoder.getCurrentPosition(), forwardEncoder.getCurrentPosition());
-
-
-        drive.enableMotors();
-
-        double y = -yDistance;
-        double x = xDistance;
-        double rx = t;
-
-
-        double r = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-
-        do {
-            double v1 = (y + x + rx) / r;
-            double v2 = (y - x + rx) / r;
-            double v3 = (y - x - rx) / r;
-            double v4 = (y + x - rx) / r;
-            drive.setCustomPower(v1, v2, v3, v4);
-
-            telemetry.addData("acum sunt la cm", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
-            telemetry.update();
-        } while (drive.isEntireRobotBusy() && Math.abs(encoder_distance*COUNTS_PER_CM) < distance);
-
-        drive.stop();
-        drive.enableMotors();
-
-    }
 
 
     private void resolveError(double targetPosition, double speed, DcMotorEx encoder) {

@@ -28,7 +28,7 @@ public class encoderUtil {
     }
 
     @NonNull
-    public void setEncoderMode(encoderMode encoderMode) {
+    public  void setEncoderMode(encoderMode encoderMode) {
         switch (encoderMode) {
             case STOP_AND_RESET:
                 leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

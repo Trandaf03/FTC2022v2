@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.robot.Drive;
 import org.firstinspires.ftc.teamcode.robot.Ducky;
@@ -32,12 +33,20 @@ public class Autonomie extends LinearOpMode {
         if (opModeIsActive() && !isStopRequested()){
 
 
-            slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
-            odometry.driveY(38, 0.25, isStopRequested());
+            odometry.driveY(10, 0.25, isStopRequested());
 
-            slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
-            this.sleep(800);
-            slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
+//            slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
+//
+//            odometry.driveY_and_lift(38, 0.25, 1);
+//            slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
+//            this.sleep(1000);
+//
+//
+//            slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
+
+
+
+
 
 
             this.sleep(2000);
