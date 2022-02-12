@@ -19,6 +19,9 @@ public class gyroUtil {
     private Orientation robotOrientation;
     private hardwareMapIDs ids;
 
+    private double globalAngle = 0;
+    private double grade;
+
     public gyroUtil(HardwareMap hardwareMap) {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -62,5 +65,8 @@ public class gyroUtil {
     private String formatDegrees(double degrees) {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
+
+
+
 
 }
