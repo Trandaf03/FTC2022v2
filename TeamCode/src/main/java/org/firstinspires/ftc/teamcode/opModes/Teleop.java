@@ -115,14 +115,14 @@ public class Teleop extends LinearOpMode {
             if (this.gamepad1.dpad_up && culisantaSus == false) {
                 slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                slider.liftSlider(Slider.sliderPos.HIGH_POS, 0.75);
+                slider.liftSlider( 0.75);
                 culisantaSus = true;
                 this.sleep(200);
             }
             if (this.gamepad1.dpad_down && culisantaSus) {
                 slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                slider.liftSlider(Slider.sliderPos.HIGH_POS, -0.55);
+                slider.liftSlider( -0.55);
                 culisantaSus = false;
                 this.sleep(200);
             }

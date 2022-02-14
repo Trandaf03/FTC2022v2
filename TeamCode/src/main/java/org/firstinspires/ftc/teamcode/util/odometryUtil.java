@@ -78,6 +78,7 @@ public class odometryUtil {
         while (running  ) {
             slider.startCulisanta(0.75*directie);
             slider.stopCulisanta(Slider.sliderPos.HIGH_POS);
+
             if(returnY() > Math.abs(distance) ){
                 drive.stop();
             }
@@ -90,7 +91,7 @@ public class odometryUtil {
         drive.disableMotors();
     }
 
-    public void driveY(double distance, double power, boolean stop) {
+    public void driveY(double distance, double power) {
 
         drive.enableMotors();
         distance = Math.abs(distance * COUNTS_PER_CM);

@@ -38,13 +38,13 @@ public class Slider {
 
     public double returnPos(){return Math.abs(sliderMotor.getCurrentPosition()); }
 
-    public void liftSlider(sliderPos position, double speed){
+    public void liftSlider( double speed){
 
         culisantaRunnig = true;
         sliderMotor.setPower(speed);
 
         while(culisantaRunnig){
-            if(returnPos() > returnPositionTicks(position)){
+            if(returnPos() > returnPositionTicks(Slider.sliderPos.HIGH_POS)){
                 sliderMotor.setPower(0);
                 culisantaRunnig = false;
             }
