@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -23,7 +25,7 @@ public class Drive {
 
     private double globalAngle = 0;
     private double grade;
-    gyroUtil gyro = new gyroUtil(hardwareMap);
+    gyroUtil gyro = new gyroUtil();
 
 
 
@@ -49,6 +51,9 @@ public class Drive {
         breaking.setBreakingMode(breakingMode);
         dir.setRobotDirection(direction);
         mode.setEncoderMode(encoderMode);
+        gyro.gyroInit(hardwareMap);
+
+
 
         stop();
     }
@@ -133,7 +138,7 @@ public class Drive {
         return corectie;
     }
 
-    public void spin(double degrees, double power) {
+    public void spin(double degrees, double power) throws InterruptedException {
 
         double  lp, rp;
         resetAngle();
@@ -156,8 +161,12 @@ public class Drive {
         rightFront.setPower(rp);
 
         if (degrees < 0)
-            while (getAngle() > degrees) {}
-        else
+        {
+            while (getAngle() == 0) {}
+
+            while ( getAngle() > degrees) {}
+        }
+        else    //.
             while (getAngle() < degrees) {}
 
         stop();

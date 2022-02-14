@@ -3,13 +3,16 @@ package org.firstinspires.ftc.teamcode.util;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.hardwareMapIDs;
+import org.firstinspires.ftc.teamcode.robot.Drive;
 
 import java.util.Locale;
 
@@ -17,19 +20,30 @@ public class gyroUtil {
 
     private BNO055IMU imuSensor;
     private Orientation robotOrientation;
+
+
+
     private hardwareMapIDs ids;
+    private HardwareMap hardwareMap;
+    private Telemetry telemetry;
+    private hardwareMapIDs id = new hardwareMapIDs();
+
 
     private double globalAngle = 0;
     private double grade;
 
-    public gyroUtil(HardwareMap hardwareMap) {
+    public void gyroInit(HardwareMap hardwareMap) {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        //parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
 
-        imuSensor = hardwareMap.get(BNO055IMU.class, ids.imu);
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+
+        parameters.loggingEnabled = false;
+
+
+        imuSensor = hardwareMap.get(BNO055IMU.class, "imu");
+
         imuSensor.initialize(parameters);
     }
 
@@ -41,7 +55,6 @@ public class gyroUtil {
 
     }
 
-    @NonNull
     public double returnAngle(ROBOT_GYRO_DIRECTION robotDirection) {
         robotOrientation = imuSensor.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
 

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.Slider;
 import org.firstinspires.ftc.teamcode.util.breakingModeUtil;
 import org.firstinspires.ftc.teamcode.util.directionUtil;
 import org.firstinspires.ftc.teamcode.util.encoderUtil;
+import org.firstinspires.ftc.teamcode.util.gyroUtil;
 import org.firstinspires.ftc.teamcode.util.odometryUtil;
 
 
@@ -22,31 +23,23 @@ public class Autonomie extends LinearOpMode {
         Drive drive = new Drive(hardwareMap, breakingModeUtil.breakingMode.BRAKE, directionUtil.direction.FORWARD, encoderUtil.encoderMode.RUN_USING);
         Slider slider = new Slider(hardwareMap);
         Ducky ducky = new Ducky(hardwareMap);
+        gyroUtil gyro = new gyroUtil();
+
 
 
         odometryUtil odometry = new odometryUtil(hardwareMap,drive,telemetry);
 
         slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
+        gyro.gyroInit(hardwareMap);
 
 
         waitForStart();
         if (opModeIsActive() && !isStopRequested()){
 
 
-            odometry.driveY(10, 0.25, isStopRequested());
+            this.sleep(1000);
 
-//            slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
-//
-//            odometry.driveY_and_lift(38, 0.25, 1);
-//            slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
-//            this.sleep(1000);
-//
-//
-//            slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
-
-
-
-
+            drive.spin(90, 0.25);
 
 
             this.sleep(2000);
