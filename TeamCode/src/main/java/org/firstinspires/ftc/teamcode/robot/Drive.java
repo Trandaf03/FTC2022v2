@@ -162,11 +162,12 @@ public class Drive {
 
         if (degrees < 0)
         {
+            // On right turn we have to get off zero first.
             while (getAngle() == 0) {}
 
-            while ( getAngle() > degrees) {}
+            while (getAngle() > degrees) {}
         }
-        else    //.
+        else    // left turn.
             while (getAngle() < degrees) {}
 
         stop();

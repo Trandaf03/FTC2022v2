@@ -36,11 +36,11 @@ public class gyroUtil {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode                = BNO055IMU.SensorMode.IMU;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.useExternalCrystal   = true;
 
-        parameters.loggingEnabled = false;
-
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
 
         imuSensor = hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -56,7 +56,7 @@ public class gyroUtil {
     }
 
     public double returnAngle(ROBOT_GYRO_DIRECTION robotDirection) {
-        robotOrientation = imuSensor.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+        robotOrientation = imuSensor.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         switch (robotDirection) {
             case HEADING:

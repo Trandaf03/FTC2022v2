@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.robot.Slider;
 import org.firstinspires.ftc.teamcode.util.breakingModeUtil;
 import org.firstinspires.ftc.teamcode.util.directionUtil;
 import org.firstinspires.ftc.teamcode.util.encoderUtil;
+import org.firstinspires.ftc.teamcode.util.gyroUtil;
 import org.firstinspires.ftc.teamcode.util.odometryUtil;
 
 @TeleOp(name = "MainTele")
@@ -25,6 +26,11 @@ public class Teleop extends LinearOpMode {
         Slider slider = new Slider(hardwareMap);
         Collector collector = new Collector(hardwareMap);
         odometryUtil odometry = new odometryUtil(hardwareMap,drive,telemetry);
+        gyroUtil gyro = new gyroUtil();
+        gyro.gyroInit(hardwareMap);
+
+
+
 
 //        odometryUtil odometry = new odometryUtil();
 
@@ -142,6 +148,7 @@ public class Teleop extends LinearOpMode {
             telemetry.addLine("culisanta: "+ String.valueOf(slider.sliderMotor.getCurrentPosition()));
             telemetry.addLine("X: "+ odometry.returnX());
             telemetry.addLine("Y: "+ odometry.returnY());
+
 
             telemetry.update();
 

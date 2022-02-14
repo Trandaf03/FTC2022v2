@@ -38,8 +38,11 @@ public class Autonomie extends LinearOpMode {
 
 
             this.sleep(1000);
-
+            drive.resetAngle();
             drive.spin(90, 0.25);
+
+            telemetry.addLine(String.valueOf(gyro.returnAngle(gyroUtil.ROBOT_GYRO_DIRECTION.PITCH)));
+            telemetry.update();
 
 
             this.sleep(2000);
