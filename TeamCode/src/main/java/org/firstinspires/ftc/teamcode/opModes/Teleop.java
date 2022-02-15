@@ -42,7 +42,7 @@ public class Teleop extends LinearOpMode {
         boolean sus = false;
         boolean sliderJos = false;
         boolean colectat = false;
-        boolean culisantaSus = false;
+        boolean aPlecat = false;
 
         slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
 
@@ -112,20 +112,13 @@ public class Teleop extends LinearOpMode {
 
             }
 
-            if (this.gamepad1.dpad_up && culisantaSus == false) {
-                slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                slider.liftSlider( 0.75);
-                culisantaSus = true;
-                this.sleep(200);
+            if (this.gamepad1.dpad_up ) {
+                slider.sliderMotor.setPower(0.75);
             }
-            if (this.gamepad1.dpad_down && culisantaSus) {
-                slider.sliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                slider.liftSlider( -0.55);
-                culisantaSus = false;
-                this.sleep(200);
+            if(slider.stopCulisanta(1400)) {
+                slider.startCulisanta(0);
             }
+
 
 
             if(this.gamepad1.right_trigger > 0){

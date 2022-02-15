@@ -65,6 +65,8 @@ public class odometryUtil {
 
     //fata spate
     public void driveY_and_lift(double distance, double power, int directie) {
+        boolean culSus = false;
+        boolean driveAjuns = false;
 
         drive.enableMotors();
         running = true;
@@ -72,21 +74,31 @@ public class odometryUtil {
         distance = Math.abs(distance * COUNTS_PER_CM);
 
         resetForword();
+        slider.startCulisanta(0.9*directie);
 
         drive.straightPower(power);
 
-        while (running  ) {
-            slider.startCulisanta(0.75*directie);
-            slider.stopCulisanta(Slider.sliderPos.HIGH_POS);
+
+        while (running ) {
+
+            if(slider.stopCulisanta(Slider.sliderPos.HIGH_POS)){
+                slider.startCulisanta(0*directie);
+                culSus = true;
+
+            }
 
             if(returnY() > Math.abs(distance) ){
                 drive.stop();
+                driveAjuns = true;
+            }
+            if(culSus && driveAjuns){
+                break;
             }
 
             telemetry.addData("acum sunt la cm ", forwardEncoder.getCurrentPosition() / COUNTS_PER_CM);
             telemetry.update();
         }
-        boolean running = false;
+         running = false;
 
         drive.disableMotors();
     }
@@ -120,7 +132,7 @@ public class odometryUtil {
         drive.strafePower(power);
         while (returnX() < Math.abs(distance)) {
             slider.startCulisanta(0.75);
-            slider.stopCulisanta(Slider.sliderPos.HIGH_POS);
+            //slider.stopCulisanta(Slider.sliderPos.HIGH_POS);
             telemetry.addData("acum sunt la cm ", leftEncoder.getCurrentPosition() / COUNTS_PER_CM);
             telemetry.update();
         }

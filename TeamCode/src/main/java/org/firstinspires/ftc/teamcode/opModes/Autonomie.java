@@ -46,33 +46,36 @@ public class Autonomie extends LinearOpMode {
 
             slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
 
-            odometry.driveY_and_lift(38, 0.5, 1);
+            odometry.driveY_and_lift(25, 0.5, 1);
 
             slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
             this.sleep(1000);
             slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
+
+            this.sleep(300);
             slider.liftSlider(-0.5);
 
-            drive.spin(30, 0.25);
-            collector.startCollector(1, Collector.COLLECTING_DIRECTION.FORWARD);
-            odometry.driveY(40, 0.5);
-            this.sleep(300);
-            slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
-            collector.startCollector(0, Collector.COLLECTING_DIRECTION.FORWARD);
 
-
-            odometry.driveY_and_lift(40, 0.5, -1);
-            drive.spin(-30, 0.25);
-            this.sleep(200);
-            slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
-            this.sleep(1000);
-            slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
-
-
-            drive.spin(50, 0.25);
-            odometry.driveY_and_lift(60, -0.5, -1);
-            ducky.startDucky(0.25, Ducky.DUCKY_DIRECTION.FORWARD);
-            this.sleep(1000);
+//            drive.spin(30, 0.25);
+//            collector.startCollector(1, Collector.COLLECTING_DIRECTION.FORWARD);
+//            odometry.driveY(40, 0.5);
+//            this.sleep(300);
+//            slider.setServoPosition(Slider.servoPos.SERVO_COLECTAT_POS);
+//            collector.startCollector(0, Collector.COLLECTING_DIRECTION.FORWARD);
+//
+//
+//            odometry.driveY_and_lift(40, 0.5, -1);
+//            drive.spin(-30, 0.25);
+//            this.sleep(200);
+//            slider.setServoPosition(Slider.servoPos.SERVO_DOWN_POS);
+//            this.sleep(1000);
+//            slider.setServoPosition(Slider.servoPos.SERVO_UP_POS);
+//
+//
+//            drive.spin(50, 0.25);
+//            odometry.driveY_and_lift(60, -0.5, -1);
+//            ducky.startDucky(0.25, Ducky.DUCKY_DIRECTION.FORWARD);
+//            this.sleep(1000);
 
 
 
